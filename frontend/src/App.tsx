@@ -69,7 +69,7 @@ export function App() {
     setErrorMessage(null);
 
     try {
-      const res = await fetch('${API}/api/v1/threats/execute', {
+        const res = await fetch(`${API}/api/v1/swarm/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -99,7 +99,7 @@ export function App() {
   useEffect(() => {
     const init = async () => {
       try {
-        const res = await fetch('${API}/api/v1/threats/active');
+        const res = await fetch(`${API}/api/v1/threats/active`);
         if (res.ok) {
           const list = await res.json();
           setThreats(list);
