@@ -4,6 +4,7 @@ import { StatsBar } from './components/StatsBar';
 import { MapView } from './components/MapView';
 import { InspectorPanel } from './components/InspectorPanel';
 import type { SwarmExecutionResponse, AgentReasoningStep } from './types';
+const API = import.meta.env.VITE_API_URL ?? '';
 
 export function App() {
   const [threats, setThreats] = useState<any[]>([]);
@@ -19,7 +20,8 @@ export function App() {
   // Initialize WebSocket connection for progressive streaming
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/live`;
+    const wsBase = API ? API.replace(/^http/, 'ws') : `${protocol}//${window.location.host}`;
+    const wsUrl = `${wsBase}/ws/live`;
     
     let ws: WebSocket;
     try {
@@ -67,7 +69,7 @@ export function App() {
     setErrorMessage(null);
 
     try {
-      const res = await fetch('/api/v1/swarm/execute', {
+      const res = await fetch('/api/v1/threats/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
